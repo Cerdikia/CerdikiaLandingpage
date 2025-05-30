@@ -156,7 +156,7 @@ export default function Home() {
                 </Button>
               </div>
 
-              <div className="flex items-center space-x-8 pt-4">
+              {/* <div className="flex items-center space-x-8 pt-4">
                 <div className="flex items-center space-x-2">
                   <div className="flex -space-x-2">
                     {[1, 2, 3, 4].map((i) => (
@@ -174,7 +174,7 @@ export default function Home() {
                   ))}
                   <span className="text-sm text-gray-600 ml-2">4.9 rating</span>
                 </div>
-              </div>
+              </div> */}
             </div>
 
             <div className="relative">
@@ -513,7 +513,7 @@ export default function Home() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-20 bg-white">
+      {/* <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8">
             {[
@@ -534,7 +534,7 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Download Section */}
       <section id="download" className="py-20 bg-gradient-to-br from-blue-600 to-cyan-500">
