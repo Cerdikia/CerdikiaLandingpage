@@ -307,23 +307,23 @@ export default function Home() {
                   className="w-full h-full object-cover"
                 />
 
-                {/* Animated Mockups Overlay */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  {/* Latihan Frame - Center with pulse */}
-                  <div className="absolute z-20 transition-all duration-1000">
+                {/* Animated Frames Section */}
+                <div className="relative w-full h-[400px] flex items-center justify-center">
+                  {/* Latihan Frame - Center with fade animation */}
+                  <div className="absolute z-20 opacity-0 transition-all duration-1000">
                     <Image
                       src="/images/latihan-frame.svg"
                       alt="Latihan Screen"
                       width={180}
                       height={360}
-                      className="w-44 h-auto drop-shadow-2xl hover:scale-110 transition-transform duration-300 cursor-pointer animate-pulse"
+                      className="w-44 h-auto drop-shadow-2xl hover:scale-110 transition-transform duration-300 cursor-pointer"
                     />
                   </div>
 
-                  {/* Question Frame - Top Right with slide animation */}
+                  {/* Question Frame - Top Right with fade animation */}
                   <div
-                    className="absolute top-6 right-6 z-10 animate-bounce transition-all duration-1000"
-                    style={{ animationDelay: "0.5s", animationDuration: "3s" }}
+                    className="absolute top-6 right-6 z-10 opacity-0 transition-all duration-1000"
+                    style={{ transitionDelay: "0.3s" }}
                   >
                     <Image
                       src="/images/question-frame.svg"
@@ -334,10 +334,10 @@ export default function Home() {
                     />
                   </div>
 
-                  {/* Data Diri Frame - Top Left with float animation */}
+                  {/* Data Diri Frame - Top Left with fade animation */}
                   <div
-                    className="absolute top-6 left-6 z-10 animate-bounce transition-all duration-1000"
-                    style={{ animationDelay: "1s", animationDuration: "4s" }}
+                    className="absolute top-6 left-6 z-10 opacity-0 transition-all duration-1000"
+                    style={{ transitionDelay: "0.6s" }}
                   >
                     <Image
                       src="/images/data-diri-frame.svg"
@@ -348,10 +348,10 @@ export default function Home() {
                     />
                   </div>
 
-                  {/* Login Frame - Bottom with slide up animation */}
+                  {/* Login Frame - Bottom with fade animation */}
                   <div
-                    className="absolute bottom-6 z-10 animate-bounce transition-all duration-1000"
-                    style={{ animationDelay: "1.5s", animationDuration: "5s" }}
+                    className="absolute bottom-6 z-10 opacity-0 transition-all duration-1000"
+                    style={{ transitionDelay: "0.9s" }}
                   >
                     <Image
                       src="/images/login-frame.svg"
@@ -362,38 +362,35 @@ export default function Home() {
                     />
                   </div>
 
-                  {/* Floating particles */}
-                  <div className="absolute top-1/4 left-1/4 w-3 h-3 bg-yellow-400 rounded-full animate-ping opacity-75 transition-all duration-1000"></div>
+                  {/* Home Frame - Bottom Left with fade animation */}
                   <div
-                    className="absolute top-3/4 right-1/4 w-2 h-2 bg-green-400 rounded-full animate-ping opacity-75 transition-all duration-1000"
+                    className="absolute bottom-6 left-12 z-10 opacity-0 transition-all duration-1000"
+                    style={{ transitionDelay: "1.2s" }}
+                  >
+                    <Image
+                      src="/images/home-frame.svg"
+                      alt="Home Screen"
+                      width={120}
+                      height={240}
+                      className="w-28 h-auto drop-shadow-xl hover:scale-110 transition-transform duration-300 cursor-pointer transform -rotate-6"
+                    />
+                  </div>
+
+                  {/* Floating particles */}
+                  <div className="absolute top-1/4 left-1/4 w-3 h-3 bg-yellow-400 rounded-full animate-ping opacity-75"></div>
+                  <div
+                    className="absolute top-3/4 right-1/4 w-2 h-2 bg-green-400 rounded-full animate-ping opacity-75"
                     style={{ animationDelay: "1s" }}
                   ></div>
                   <div
-                    className="absolute top-1/2 left-1/6 w-2 h-2 bg-purple-400 rounded-full animate-ping opacity-75 transition-all duration-1000"
+                    className="absolute top-1/2 left-1/6 w-2 h-2 bg-purple-400 rounded-full animate-ping opacity-75"
                     style={{ animationDelay: "2s" }}
                   ></div>
                   <div
-                    className="absolute bottom-1/4 right-1/6 w-4 h-4 bg-pink-400 rounded-full animate-ping opacity-75 transition-all duration-1000"
+                    className="absolute bottom-1/4 right-1/6 w-4 h-4 bg-pink-400 rounded-full animate-ping opacity-75"
                     style={{ animationDelay: "0.5s" }}
                   ></div>
                 </div>
-
-                {/* Overlay gradient for better contrast */}
-                <div className="absolute inset-0 bg-gradient-to-t from-blue-900/20 to-transparent pointer-events-none"></div>
-              </div>
-
-              {/* Interactive Labels */}
-              <div className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm rounded-lg px-2 py-1 shadow-lg transition-all duration-1000">
-                <span className="text-xs font-medium text-gray-700">📚 Latihan Soal</span>
-              </div>
-              <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm rounded-lg px-2 py-1 shadow-lg transition-all duration-1000">
-                <span className="text-xs font-medium text-gray-700">❓ Quiz Interaktif</span>
-              </div>
-              <div className="absolute bottom-2 left-2 bg-white/90 backdrop-blur-sm rounded-lg px-2 py-1 shadow-lg transition-all duration-1000">
-                <span className="text-xs font-medium text-gray-700">👤 Data Pengguna</span>
-              </div>
-              <div className="absolute bottom-2 right-2 bg-white/90 backdrop-blur-sm rounded-lg px-2 py-1 shadow-lg transition-all duration-1000">
-                <span className="text-xs font-medium text-gray-700">🔐 Login Aman</span>
               </div>
             </div>
           </div>
