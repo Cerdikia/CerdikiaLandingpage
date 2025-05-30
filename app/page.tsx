@@ -21,37 +21,55 @@ import {
 } from "lucide-react"
 
 export default function Home() {
-  const featuresPlaceholderRef = useRef<HTMLDivElement>(null)
+  const featuresPlaceholderRef = useRef<HTMLDivElement>(null);
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" })
-  }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
+          const target = entry.target;
+
           if (entry.isIntersecting) {
-            entry.target.classList.add("animate-fade-in")
-            entry.target.classList.remove("animate-fade-out")
+            target.classList.add("animate-fade-in");
+            target.classList.remove("animate-fade-out");
+
+            // Trigger staggered frame animations
+            const frames = target.querySelectorAll(".animated-frame");
+
+            frames.forEach((frame, index) => {
+              setTimeout(() => {
+                frame.classList.replace("opacity-0", "opacity-100");
+              }, index * 300); // 300ms delay per frame
+            });
           } else {
-            entry.target.classList.add("animate-fade-out")
-            entry.target.classList.remove("animate-fade-in")
+            target.classList.add("animate-fade-out");
+            target.classList.remove("animate-fade-in");
+
+            // Optionally reset opacity on scroll away
+            const frames = target.querySelectorAll(".animated-frame");
+            frames.forEach((frame) => {
+              frame.classList.replace("opacity-100", "opacity-0");
+            });
           }
-        })
+        });
       },
       {
         threshold: 0.3,
         rootMargin: "-50px 0px -50px 0px",
-      },
-    )
+      }
+    );
 
-    if (featuresPlaceholderRef.current) {
-      observer.observe(featuresPlaceholderRef.current)
-    }
+    const placeholder = document.querySelector('[data-features-section]');
+    if (placeholder) observer.observe(placeholder);
 
-    return () => observer.disconnect()
-  }, [])
+    return () => {
+      if (placeholder) observer.unobserve(placeholder);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 to-blue-50">
@@ -142,6 +160,14 @@ export default function Home() {
                 <Button
                   size="lg"
                   className="bg-gradient-to-r from-blue-500 to-cyan-400 hover:from-blue-600 hover:to-cyan-500 text-lg px-8 py-6"
+                  onClick={() => {
+                    const apkUrl = process.env.NEXT_PUBLIC_DOWNLOAD_LINK;
+                    if (apkUrl) {
+                      window.open(apkUrl, '_blank'); // Opens in new tab for safety
+                    } else {
+                      console.error("APK URL not found in environment variables");
+                    }
+                  }}
                 >
                   <Play className="w-5 h-5 mr-2" />
                   Ayo Mulai Belajar
@@ -296,101 +322,124 @@ export default function Home() {
             </div>
 
             {/* Interactive Placeholder with Animated Mockups - Features Section */}
-            <div className="relative" ref={featuresPlaceholderRef}>
-              <div className="relative w-full h-[400px] rounded-3xl overflow-hidden shadow-2xl transition-all duration-1000">
-                {/* Background Placeholder */}
-                <Image
-                  src="/images/placeholder.svg"
-                  alt="App Features Preview"
-                  width={600}
-                  height={400}
-                  className="w-full h-full object-cover"
-                />
+            <div className="relative" data-features-section ref={featuresPlaceholderRef}>
+              <div className="relative w-full h-[400px] rounded-3xl overflow-hidden shadow-2xl">
+              {/* Background Placeholder */}
+              <Image
+                src="/images/placeholder.svg"
+                alt="App Features Preview"
+                width={600}
+                height={400}
+                className="w-full h-full object-cover"
+              />
 
-                {/* Animated Frames Section */}
-                <div className="relative w-full h-[400px] flex items-center justify-center">
-                  {/* Latihan Frame - Center with fade animation */}
-                  <div className="absolute z-20 opacity-0 transition-all duration-1000">
-                    <Image
-                      src="/images/latihan-frame.svg"
-                      alt="Latihan Screen"
-                      width={180}
-                      height={360}
-                      className="w-44 h-auto drop-shadow-2xl hover:scale-110 transition-transform duration-300 cursor-pointer"
-                    />
-                  </div>
-
-                  {/* Question Frame - Top Right with fade animation */}
-                  <div
-                    className="absolute top-6 right-6 z-10 opacity-0 transition-all duration-1000"
-                    style={{ transitionDelay: "0.3s" }}
-                  >
-                    <Image
-                      src="/images/question-frame.svg"
-                      alt="Question Screen"
-                      width={130}
-                      height={260}
-                      className="w-32 h-auto drop-shadow-xl hover:scale-110 transition-transform duration-300 cursor-pointer transform rotate-12"
-                    />
-                  </div>
-
-                  {/* Data Diri Frame - Top Left with fade animation */}
-                  <div
-                    className="absolute top-6 left-6 z-10 opacity-0 transition-all duration-1000"
-                    style={{ transitionDelay: "0.6s" }}
-                  >
-                    <Image
-                      src="/images/data-diri-frame.svg"
-                      alt="Data Diri Screen"
-                      width={130}
-                      height={260}
-                      className="w-32 h-auto drop-shadow-xl hover:scale-110 transition-transform duration-300 cursor-pointer transform -rotate-12"
-                    />
-                  </div>
-
-                  {/* Login Frame - Bottom with fade animation */}
-                  <div
-                    className="absolute bottom-6 z-10 opacity-0 transition-all duration-1000"
-                    style={{ transitionDelay: "0.9s" }}
-                  >
-                    <Image
-                      src="/images/login-frame.svg"
-                      alt="Login Screen"
-                      width={130}
-                      height={260}
-                      className="w-32 h-auto drop-shadow-xl hover:scale-110 transition-transform duration-300 cursor-pointer transform rotate-6"
-                    />
-                  </div>
-
-                  {/* Home Frame - Bottom Left with fade animation */}
-                  <div
-                    className="absolute bottom-6 left-12 z-10 opacity-0 transition-all duration-1000"
-                    style={{ transitionDelay: "1.2s" }}
-                  >
-                    <Image
-                      src="/images/home-frame.svg"
-                      alt="Home Screen"
-                      width={120}
-                      height={240}
-                      className="w-28 h-auto drop-shadow-xl hover:scale-110 transition-transform duration-300 cursor-pointer transform -rotate-6"
-                    />
-                  </div>
-
-                  {/* Floating particles */}
-                  <div className="absolute top-1/4 left-1/4 w-3 h-3 bg-yellow-400 rounded-full animate-ping opacity-75"></div>
-                  <div
-                    className="absolute top-3/4 right-1/4 w-2 h-2 bg-green-400 rounded-full animate-ping opacity-75"
-                    style={{ animationDelay: "1s" }}
-                  ></div>
-                  <div
-                    className="absolute top-1/2 left-1/6 w-2 h-2 bg-purple-400 rounded-full animate-ping opacity-75"
-                    style={{ animationDelay: "2s" }}
-                  ></div>
-                  <div
-                    className="absolute bottom-1/4 right-1/6 w-4 h-4 bg-pink-400 rounded-full animate-ping opacity-75"
-                    style={{ animationDelay: "0.5s" }}
-                  ></div>
+              {/* Animated Frames Section */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                {/* Latihan Frame - Center */}
+                <div
+                  className="absolute z-20 opacity-0 transition-opacity duration-1000 animated-frame"
+                  style={{
+                    transform: "translate(-50%, -50%) translateX(-40px) translateY(-40px) rotate(-5deg)",
+                    left: "50%",
+                    top: "50%",
+                  }}
+                >
+                  <Image
+                    src="/images/latihan-frame.svg"
+                    alt="Latihan Screen"
+                    width={180}
+                    height={360}
+                    className="w-44 h-auto drop-shadow-2xl hover:scale-110 transition-transform duration-300 cursor-pointer"
+                  />
                 </div>
+
+                {/* Question Frame - Top Right */}
+                <div
+                  className="absolute opacity-0 transition-opacity duration-1000 animated-frame"
+                  style={{
+                    top: "20%",
+                    right: "10%",
+                    transform: "rotate(8deg)",
+                  }}
+                >
+                  <Image
+                    src="/images/question-frame.svg"
+                    alt="Question Screen"
+                    width={130}
+                    height={260}
+                    className="w-32 h-auto drop-shadow-xl hover:scale-105 transition-transform duration-300 cursor-pointer"
+                  />
+                </div>
+
+                {/* Data Diri Frame - Top Left */}
+                <div
+                  className="absolute opacity-0 transition-opacity duration-1000 animated-frame"
+                  style={{
+                    top: "15%",
+                    left: "10%",
+                    transform: "rotate(-10deg)",
+                  }}
+                >
+                  <Image
+                    src="/images/data-diri-frame.svg"
+                    alt="Data Diri Screen"
+                    width={130}
+                    height={260}
+                    className="w-32 h-auto drop-shadow-xl hover:scale-105 transition-transform duration-300 cursor-pointer"
+                  />
+                </div>
+
+                {/* Login Frame - Bottom */}
+                <div
+                  className="absolute opacity-0 transition-opacity duration-1000 animated-frame"
+                  style={{
+                    bottom: "20%",
+                    right: "15%",
+                    transform: "rotate(5deg)",
+                  }}
+                >
+                  <Image
+                    src="/images/login-frame.svg"
+                    alt="Login Screen"
+                    width={130}
+                    height={260}
+                    className="w-32 h-auto drop-shadow-xl hover:scale-105 transition-transform duration-300 cursor-pointer"
+                  />
+                </div>
+
+                {/* Home Frame - Bottom Left */}
+                <div
+                  className="absolute opacity-0 transition-opacity duration-1000 animated-frame"
+                  style={{
+                    bottom: "25%",
+                    left: "15%",
+                    transform: "rotate(-7deg)",
+                  }}
+                >
+                  <Image
+                    src="/images/home-frame.svg"
+                    alt="Home Screen"
+                    width={120}
+                    height={240}
+                    className="w-28 h-auto drop-shadow-xl hover:scale-105 transition-transform duration-300 cursor-pointer"
+                  />
+                </div>
+              </div>
+
+              {/* Floating particles */}
+              <div className="absolute top-1/4 left-1/4 w-3 h-3 bg-yellow-400 rounded-full animate-ping opacity-75"></div>
+              <div
+                className="absolute top-3/4 right-1/4 w-2 h-2 bg-green-400 rounded-full animate-ping opacity-75"
+                style={{ animationDelay: "1s" }}
+              ></div>
+              <div
+                className="absolute top-1/2 left-1/6 w-2 h-2 bg-purple-400 rounded-full animate-ping opacity-75"
+                style={{ animationDelay: "2s" }}
+              ></div>
+              <div
+                className="absolute bottom-1/4 right-1/6 w-4 h-4 bg-pink-400 rounded-full animate-ping opacity-75"
+                style={{ animationDelay: "0.5s" }}
+              ></div>
               </div>
             </div>
           </div>
@@ -550,10 +599,21 @@ export default function Home() {
                 <Apple className="w-6 h-6 mr-3" />
                 Download for iOS
               </Button> */}
-              <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-6">
-                <Download className="w-6 h-6 mr-3" />
-                Download for Android
-              </Button>
+              <Button
+              size="lg"
+              className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-6"
+              onClick={() => {
+                const link = process.env.NEXT_PUBLIC_DOWNLOAD_LINK;
+                if (link) {
+                  window.open(link, '_blank'); // Open APK link in new tab
+                } else {
+                  console.error("Download link not found in env");
+                }
+              }}
+            >
+              <Download className="w-6 h-6 mr-3" />
+              Download for Android
+            </Button>
             </div>
 
           </div>
