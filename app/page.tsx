@@ -1,682 +1,125 @@
 "use client"
 
 import Image from "next/image"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { useEffect, useRef } from "react"
-import {
-  Star,
-  Users,
-  Trophy,
-  BookOpen,
-  Smartphone,
-  Download,
-  Play,
-  Apple,
-  CheckCircle,
-  Target,
-  Award,
-  TrendingUp,
-} from "lucide-react"
+import { ArrowDown, ArrowRight, BookOpen, Check, Download, Flame, Gamepad2, Trophy, Zap } from "lucide-react"
+
+const tiers = [
+  { name: "Bronze", image: "/images/bronze.svg", note: "Langkah pertama" },
+  { name: "Silver", image: "/images/silver.svg", note: "Terus bertumbuh" },
+  { name: "Gold", image: "/images/gold.svg", note: "Makin bersinar" },
+  { name: "Platinum", image: "/images/platinum.svg", note: "Konsisten berlatih" },
+  { name: "Diamond", image: "/images/diamond.svg", note: "Puncak prestasi" },
+]
+
+const screens = [
+  { src: "/images/mockup-features.png", alt: "Beragam fitur belajar Cerdikia", title: "Belajar dengan cara yang seru", kind: "wide" },
+  { src: "/images/mockup-login.png", alt: "Halaman masuk aplikasi Cerdikia", title: "Mulai dari profilmu", kind: "half" },
+  { src: "/images/phone-question.svg", alt: "Tampilan kuis Cerdikia", title: "Jawab, kumpulkan XP", kind: "half" },
+]
+
+const downloadUrl = process.env.NEXT_PUBLIC_DOWNLOAD_LINK
 
 export default function Home() {
-  const featuresPlaceholderRef = useRef<HTMLDivElement>(null);
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const target = entry.target;
-
-          if (entry.isIntersecting) {
-            target.classList.add("animate-fade-in");
-            target.classList.remove("animate-fade-out");
-
-            // Trigger staggered frame animations
-            const frames = target.querySelectorAll(".animated-frame");
-
-            frames.forEach((frame, index) => {
-              setTimeout(() => {
-                frame.classList.replace("opacity-0", "opacity-100");
-              }, index * 300); // 300ms delay per frame
-            });
-          } else {
-            target.classList.add("animate-fade-out");
-            target.classList.remove("animate-fade-in");
-
-            // Optionally reset opacity on scroll away
-            const frames = target.querySelectorAll(".animated-frame");
-            frames.forEach((frame) => {
-              frame.classList.replace("opacity-100", "opacity-0");
-            });
-          }
-        });
-      },
-      {
-        threshold: 0.3,
-        rootMargin: "-50px 0px -50px 0px",
-      }
-    );
-
-    const placeholder = document.querySelector('[data-features-section]');
-    if (placeholder) observer.observe(placeholder);
-
-    return () => {
-      if (placeholder) observer.unobserve(placeholder);
-    };
-  }, []);
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 to-blue-50">
-      {/* Custom CSS for fade animations */}
-      <style jsx global>{`
-        .animate-fade-in {
-          animation: fadeIn 1s ease-in-out forwards;
-        }
-        .animate-fade-out {
-          animation: fadeOut 0.8s ease-in-out forwards;
-        }
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(30px) scale(0.95);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-          }
-        }
-        @keyframes fadeOut {
-          from {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-          }
-          to {
-            opacity: 0.3;
-            transform: translateY(-20px) scale(0.98);
-          }
-        }
-      `}</style>
+    <main className="site-shell">
+      <header className="topbar">
+        <a className="brand" href="#top" aria-label="Cerdikia, kembali ke atas">
+          <Image src="/images/cerdikia-logo.svg" alt="Cerdikia" width={148} height={48} priority />
+        </a>
+        <nav className="nav-links" aria-label="Navigasi utama">
+          <a href="#tentang">Tentang</a>
+          <a href="#fitur">Fitur</a>
+          <a href="#ranking">Ranking</a>
+        </nav>
+        <a className="button button-small" href={downloadUrl || "#unduh"} target={downloadUrl ? "_blank" : undefined} rel={downloadUrl ? "noreferrer" : undefined}>
+          <span>Unduh aplikasi</span><ArrowRight size={16} />
+        </a>
+      </header>
 
-      {/* Navigation */}
-      <nav className="bg-white/80 backdrop-blur-md border-b border-blue-100 sticky top-0 z-50">
-        <div className="max-w-8xl mx-auto px-2 sm:px-4 lg:px-4">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center justify-start flex-shrink-0">
-              <button onClick={scrollToTop} className="focus:outline-none flex-shrink-0">
-                <Image
-                  src="/images/cerdikia-logo.svg"
-                  alt="Cerdikia Logo"
-                  width={140}
-                  height={45}
-                  className="h-25 w-auto cursor-pointer hover:scale-105 transition-transform duration-200"
-                  priority
-                />
-              </button>
-            </div>
-            <div className="hidden md:flex items-center space-x-8 flex-shrink-0">
-              <a href="#features" className="text-gray-600 hover:text-blue-600 transition-colors">
-                Features
-              </a>
-              <a href="#screenshots" className="text-gray-600 hover:text-blue-600 transition-colors">
-                Screenshots
-              </a>
-              <a href="#download" className="text-gray-600 hover:text-blue-600 transition-colors">
-                Download
-              </a>
-              <Button className="bg-gradient-to-r from-blue-500 to-cyan-400 hover:from-blue-600 hover:to-cyan-500">
-                Get Started
-              </Button>
-            </div>
+      <section className="hero section-wrap" id="top">
+        <div className="hero-copy">
+          <p className="eyebrow"><span className="eyebrow-dot" /> Teman belajar setiap hari</p>
+          <h1>Belajar jadi petualangan <span>seru.</span></h1>
+          <p className="hero-description">Kenalan dengan Cerdikia — ruang belajar interaktif yang mengajak anak berlatih, bermain, dan naik level dengan caranya sendiri.</p>
+          <div className="hero-actions">
+            <a className="button" href={downloadUrl || "#unduh"} target={downloadUrl ? "_blank" : undefined} rel={downloadUrl ? "noreferrer" : undefined}><Download size={18} /> Mulai belajar</a>
+            <a className="text-link" href="#tentang">Kenali Cerdikia <ArrowDown size={15} /></a>
           </div>
+          <div className="hero-note"><span className="note-icon"><BookOpen size={16} /></span><span>Belajar sedikit demi sedikit,<br /><strong>bertumbuh setiap hari.</strong></span></div>
         </div>
-      </nav>
+        <div className="hero-art" aria-label="Pratinjau aplikasi Cerdikia">
+          <div className="art-tag tag-top"><span className="tag-icon"><Zap size={15} fill="currentColor" /></span> Poin XP terkumpul</div>
+          <Image className="overview-image" src="/images/mockup-overview.png" alt="Kolase layar belajar, latihan, misi, dan reward di aplikasi Cerdikia" width={1400} height={800} priority />
+          <div className="art-tag tag-bottom"><span className="tag-icon tag-orange"><Trophy size={15} /></span> Setiap latihan punya arti</div>
+        </div>
+        <a className="scroll-cue" href="#tentang"><span /> Gulir untuk menjelajah</a>
+      </section>
 
-      {/* Hero Section */}
-      <section className="relative overflow-hidden py-20 lg:py-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
-              <div className="space-y-4">
-                <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-200">🎓 Educational Gaming App</Badge>
-                <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 leading-tight">
-                  Kumpulkan Ilmu,{" "}
-                  <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-                    Naik Level
-                  </span>
-                </h1>
-                <p className="text-xl text-gray-600 leading-relaxed">
-                  Jadilah juara masa depan dengan aplikasi pembelajaran yang menyenangkan! Belajar sambil bermain dengan
-                  karakter-karakter lucu dan sistem gamifikasi yang seru.
-                </p>
-              </div>
+      <section className="intro section-wrap" id="tentang">
+        <div className="section-marker"><span>01</span><span className="marker-line" /> Tentang Cerdikia</div>
+        <div className="intro-layout">
+          <h2>Rasa ingin tahu<br />adalah <span>awal dari semua.</span></h2>
+          <div className="intro-copy"><p>Cerdikia mengubah waktu belajar menjadi sesi yang terasa ringan dan menyenangkan. Anak bisa menjelajahi materi, mencoba kuis, lalu melihat usahanya berkembang.</p><a className="text-link" href="#fitur">Lihat cara kerjanya <ArrowRight size={15} /></a></div>
+        </div>
+        <div className="principles">
+          <article><span className="principle-number">A</span><div><h3>Belajar aktif</h3><p>Materi dan latihan mengundang anak untuk ikut mencoba.</p></div></article>
+          <article><span className="principle-number">B</span><div><h3>Progres terasa</h3><p>Poin dan level memberi tanda atas usaha yang sudah dilakukan.</p></div></article>
+          <article><span className="principle-number">C</span><div><h3>Ritme sendiri</h3><p>Jelajahi fitur belajar dengan nyaman, satu langkah demi satu.</p></div></article>
+        </div>
+      </section>
 
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r from-blue-500 to-cyan-400 hover:from-blue-600 hover:to-cyan-500 text-lg px-8 py-6"
-                  onClick={() => {
-                    const apkUrl = process.env.NEXT_PUBLIC_DOWNLOAD_LINK;
-                    if (apkUrl) {
-                      window.open(apkUrl, '_blank'); // Opens in new tab for safety
-                    } else {
-                      console.error("APK URL not found in environment variables");
-                    }
-                  }}
-                >
-                  <Play className="w-5 h-5 mr-2" />
-                  Ayo Mulai Belajar
-                </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-blue-200 text-blue-600 hover:bg-blue-50 text-lg px-8 py-6"
-                >
-                  <Smartphone className="w-5 h-5 mr-2" />
-                  Lihat Demo
-                </Button>
-              </div>
+      <section className="features section-wrap" id="fitur">
+        <div className="section-heading">
+          <div><div className="section-marker"><span>02</span><span className="marker-line" /> Di dalam aplikasi</div><h2>Satu aplikasi,<br /><span>banyak hal seru.</span></h2></div>
+          <p className="heading-aside">Dari sesi latihan sampai hadiah kecil yang bikin semangat kembali.</p>
+        </div>
+        <div className="screens-grid">
+          {screens.map((screen, index) => <article key={screen.src} className={`screen-card screen-${screen.kind}`}>
+            <div className="screen-image"><Image src={screen.src} alt={screen.alt} width={1400} height={800} /></div>
+            <div className="screen-caption"><span>0{index + 1}</span><h3>{screen.title}</h3><ArrowRight size={17} /></div>
+          </article>)}
+        </div>
+        <div className="feature-strip">
+          <div><span className="strip-icon"><Gamepad2 size={20} /></span><p><strong>Latihan interaktif</strong><br />Uji pemahaman sambil bermain.</p></div>
+          <div><span className="strip-icon"><Flame size={20} /></span><p><strong>Misi dan XP</strong><br />Jaga semangat lewat tantangan.</p></div>
+          <div><span className="strip-icon"><Trophy size={20} /></span><p><strong>Ranking belajar</strong><br />Rayakan progres di tiap level.</p></div>
+        </div>
+      </section>
 
-              {/* <div className="flex items-center space-x-8 pt-4">
-                <div className="flex items-center space-x-2">
-                  <div className="flex -space-x-2">
-                    {[1, 2, 3, 4].map((i) => (
-                      <div
-                        key={i}
-                        className="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-300 rounded-full border-2 border-white"
-                      ></div>
-                    ))}
-                  </div>
-                  <span className="text-sm text-gray-600">10,000+ siswa aktif</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                  ))}
-                  <span className="text-sm text-gray-600 ml-2">4.9 rating</span>
-                </div>
-              </div> */}
-            </div>
-
-            <div className="relative">
-              <div className="relative z-10">
-                <video
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  className="w-full h-auto rounded-2xl shadow-2xl"
-                  poster="/placeholder.svg?height=400&width=600"
-                >
-                  <source src="/video/cerdikia2.webm" type="video/webm" />
-                  Your browser does not support the video tag.
-                </video>
-              </div>
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-cyan-400/20 blur-3xl transform rotate-6"></div>
-            </div>
+      <section className="ranking" id="ranking">
+        <div className="ranking-inner section-wrap">
+          <div className="ranking-copy">
+            <div className="section-marker section-marker-light"><span>03</span><span className="marker-line" /> Tangga pencapaian</div>
+            <h2>Setiap usaha<br />punya <span>tingkat baru.</span></h2>
+            <p>Terus berlatih dan kumpulkan XP. Perjalananmu akan ditandai dengan tier ranking yang bisa diraih setahap demi setahap.</p>
+            <div className="ranking-proof"><Image src="/images/ranking-frame.svg" alt="Contoh tampilan ranking di aplikasi Cerdikia" width={200} height={400} /><span><strong>Belajar. Dapat XP.</strong><br />Lihat progres naik.</span></div>
+          </div>
+          <div className="tier-list" aria-label="Urutan tier ranking Cerdikia">
+            {tiers.map((tier, index) => <article className="tier-row" key={tier.name}>
+              <span className="tier-order">0{index + 1}</span><Image src={tier.image} alt={`Lencana ${tier.name}`} width={68} height={68} /><span className="tier-name">{tier.name}</span><span className="tier-note">{tier.note}</span><Check className="tier-check" size={16} />
+            </article>)}
+            <p className="tier-footnote">Urutan tier dari awal hingga pencapaian tertinggi.</p>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center space-y-4 mb-16">
-            <Badge className="bg-blue-100 text-blue-700">✨ Fitur Unggulan</Badge>
-            <h2 className="text-3xl lg:text-5xl font-bold text-gray-900">Mengapa Memilih Cerdikia?</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Aplikasi pembelajaran yang menggabungkan edukasi dan hiburan untuk pengalaman belajar yang tak terlupakan
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                icon: <Trophy className="w-8 h-8" />,
-                title: "Sistem Gamifikasi",
-                description: "Kumpulkan XP, naik level, dan raih achievement untuk memotivasi belajar",
-                color: "from-yellow-400 to-orange-500",
-              },
-              {
-                icon: <Users className="w-8 h-8" />,
-                title: "Leaderboard Global",
-                description: "Kompetisi sehat dengan siswa lain di seluruh Indonesia",
-                color: "from-green-400 to-emerald-500",
-              },
-              {
-                icon: <BookOpen className="w-8 h-8" />,
-                title: "Konten Interaktif",
-                description: "Materi pembelajaran dengan karakter lucu dan animasi menarik",
-                color: "from-purple-400 to-pink-500",
-              },
-              {
-                icon: <Target className="w-8 h-8" />,
-                title: "Misi Harian",
-                description: "Tantangan baru setiap hari untuk menjaga konsistensi belajar",
-                color: "from-blue-400 to-cyan-500",
-              },
-              {
-                icon: <TrendingUp className="w-8 h-8" />,
-                title: "Tracking Progress",
-                description: "Pantau perkembangan belajar dengan statistik yang detail",
-                color: "from-red-400 to-pink-500",
-              },
-              {
-                icon: <Award className="w-8 h-8" />,
-                title: "Sertifikat Digital",
-                description: "Dapatkan sertifikat untuk setiap pencapaian yang diraih",
-                color: "from-indigo-400 to-purple-500",
-              },
-            ].map((feature, index) => (
-              <Card
-                key={index}
-                className="group hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-gray-50"
-              >
-                <CardContent className="p-8">
-                  <div
-                    className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform duration-300`}
-                  >
-                    {feature.icon}
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{feature.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+      <section className="download-section section-wrap" id="unduh">
+        <div className="download-card">
+          <div className="download-stamp"><Download size={17} /> SIAP UNTUK MULAI?</div>
+          <h2>Petualangan belajarmu<br /><span>dimulai di sini.</span></h2>
+          <p>Unduh Cerdikia dan temukan pengalaman belajar yang lebih menyenangkan.</p>
+          <a className="button button-light" href={downloadUrl || "#top"} target={downloadUrl ? "_blank" : undefined} rel={downloadUrl ? "noreferrer" : undefined}><Download size={18} /> Unduh untuk Android <ArrowRight size={16} /></a>
+          {!downloadUrl && <small>Tautan unduhan akan segera tersedia.</small>}
+          <div className="download-orbit orbit-one" /><div className="download-orbit orbit-two" />
         </div>
       </section>
 
-      {/* Screenshots Section */}
-      <section id="screenshots" className="py-20 bg-gradient-to-br from-blue-50 to-cyan-50 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center space-y-4 mb-16">
-            <Badge className="bg-blue-100 text-blue-700">📱 Preview App</Badge>
-            <h2 className="text-3xl lg:text-5xl font-bold text-gray-900">Jelajahi Fitur-Fitur Menarik</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Lihat bagaimana Cerdikia membuat pembelajaran menjadi menyenangkan dan interaktif
-            </p>
-          </div>
-
-          <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
-            <div className="space-y-6">
-              <h3 className="text-2xl font-bold text-gray-900">Interface yang User-Friendly</h3>
-              <div className="space-y-4">
-                {[
-                  "Desain colorful dan menarik untuk anak-anak",
-                  "Navigasi yang mudah dan intuitif",
-                  "Karakter animasi yang menggemaskan",
-                  "Feedback visual untuk setiap interaksi",
-                ].map((item, index) => (
-                  <div key={index} className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
-                    <span className="text-gray-700">{item}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Interactive Placeholder with Animated Mockups - Features Section */}
-            <div className="relative" data-features-section ref={featuresPlaceholderRef}>
-              <div className="relative w-full h-[400px] rounded-3xl overflow-hidden shadow-2xl">
-              {/* Background Placeholder */}
-              <Image
-                src="/images/placeholder.svg"
-                alt="App Features Preview"
-                width={600}
-                height={400}
-                className="w-full h-full object-cover"
-              />
-
-              {/* Animated Frames Section */}
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                {/* Latihan Frame - Center */}
-                <div
-                  className="absolute z-20 opacity-0 transition-opacity duration-1000 animated-frame"
-                  style={{
-                    transform: "translate(-50%, -50%) translateX(-40px) translateY(-40px) rotate(-5deg)",
-                    left: "50%",
-                    top: "50%",
-                  }}
-                >
-                  <Image
-                    src="/images/latihan-frame.svg"
-                    alt="Latihan Screen"
-                    width={180}
-                    height={360}
-                    className="w-44 h-auto drop-shadow-2xl hover:scale-110 transition-transform duration-300 cursor-pointer"
-                  />
-                </div>
-
-                {/* Question Frame - Top Right */}
-                <div
-                  className="absolute opacity-0 transition-opacity duration-1000 animated-frame"
-                  style={{
-                    top: "20%",
-                    right: "10%",
-                    transform: "rotate(8deg)",
-                  }}
-                >
-                  <Image
-                    src="/images/question-frame.svg"
-                    alt="Question Screen"
-                    width={130}
-                    height={260}
-                    className="w-32 h-auto drop-shadow-xl hover:scale-105 transition-transform duration-300 cursor-pointer"
-                  />
-                </div>
-
-                {/* Data Diri Frame - Top Left */}
-                <div
-                  className="absolute opacity-0 transition-opacity duration-1000 animated-frame"
-                  style={{
-                    top: "15%",
-                    left: "10%",
-                    transform: "rotate(-10deg)",
-                  }}
-                >
-                  <Image
-                    src="/images/data-diri-frame.svg"
-                    alt="Data Diri Screen"
-                    width={130}
-                    height={260}
-                    className="w-32 h-auto drop-shadow-xl hover:scale-105 transition-transform duration-300 cursor-pointer"
-                  />
-                </div>
-
-                {/* Login Frame - Bottom */}
-                <div
-                  className="absolute opacity-0 transition-opacity duration-1000 animated-frame"
-                  style={{
-                    bottom: "20%",
-                    right: "15%",
-                    transform: "rotate(5deg)",
-                  }}
-                >
-                  <Image
-                    src="/images/login-frame.svg"
-                    alt="Login Screen"
-                    width={130}
-                    height={260}
-                    className="w-32 h-auto drop-shadow-xl hover:scale-105 transition-transform duration-300 cursor-pointer"
-                  />
-                </div>
-
-                {/* Home Frame - Bottom Left */}
-                <div
-                  className="absolute opacity-0 transition-opacity duration-1000 animated-frame"
-                  style={{
-                    bottom: "25%",
-                    left: "15%",
-                    transform: "rotate(-7deg)",
-                  }}
-                >
-                  <Image
-                    src="/images/home-frame.svg"
-                    alt="Home Screen"
-                    width={120}
-                    height={240}
-                    className="w-28 h-auto drop-shadow-xl hover:scale-105 transition-transform duration-300 cursor-pointer"
-                  />
-                </div>
-              </div>
-
-              {/* Floating particles */}
-              <div className="absolute top-1/4 left-1/4 w-3 h-3 bg-yellow-400 rounded-full animate-ping opacity-75"></div>
-              <div
-                className="absolute top-3/4 right-1/4 w-2 h-2 bg-green-400 rounded-full animate-ping opacity-75"
-                style={{ animationDelay: "1s" }}
-              ></div>
-              <div
-                className="absolute top-1/2 left-1/6 w-2 h-2 bg-purple-400 rounded-full animate-ping opacity-75"
-                style={{ animationDelay: "2s" }}
-              ></div>
-              <div
-                className="absolute bottom-1/4 right-1/6 w-4 h-4 bg-pink-400 rounded-full animate-ping opacity-75"
-                style={{ animationDelay: "0.5s" }}
-              ></div>
-              </div>
-            </div>
-          </div>
-
-          {/* Animated Chain Layout - Fixed visibility */}
-          <div className="relative">
-            <div className="text-center mb-12">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Fitur Lengkap dalam Satu Aplikasi</h3>
-              <p className="text-gray-600">Dari splash screen hingga pembelajaran interaktif</p>
-            </div>
-
-            {/* Chain Animation Container - Fixed height and overflow */}
-            <div className="relative min-h-[1200px] overflow-visible">
-              {/* Animated Chain of Mockups */}
-              <div className="flex flex-col items-center space-y-8">
-                {[
-                  { src: "/images/splash-frame.svg", alt: "Splash Screen", title: "Splash Screen" },
-                  { src: "/images/login-frame.svg", alt: "Login", title: "Login & Register" },
-                  { src: "/images/home-frame.svg", alt: "Home", title: "Dashboard Utama" },
-                  { src: "/images/latihan-frame.svg", alt: "Latihan", title: "Latihan Soal" },
-                  { src: "/images/question-frame.svg", alt: "Question", title: "Quiz Interaktif" },
-                  { src: "/images/ranking-frame.svg", alt: "Ranking", title: "Leaderboard" },
-                  { src: "/images/shop-frame.svg", alt: "Shop", title: "Toko Reward" },
-                  { src: "/images/profile-frame.svg", alt: "Profile", title: "Profil Pengguna" },
-                  { src: "/images/data-diri-frame.svg", alt: "Data Diri", title: "Pengaturan" },
-                ].map((mockup, index) => (
-                  <div key={index} className="relative group">
-                    {/* Connection Line */}
-                    {index < 8 && (
-                      <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0.5 h-8 bg-gradient-to-b from-blue-400 to-cyan-400 opacity-60 z-0"></div>
-                    )}
-
-                    {/* Mockup Container */}
-                    <div className="relative z-10">
-                      <div
-                        className="transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-2 animate-pulse"
-                        style={{
-                          animationDelay: `${index * 0.5}s`,
-                          animationDuration: "4s",
-                        }}
-                      >
-                        <Image
-                          src={mockup.src || "/placeholder.svg"}
-                          alt={mockup.alt}
-                          width={200}
-                          height={400}
-                          className="w-48 h-auto drop-shadow-2xl rounded-2xl"
-                        />
-                      </div>
-
-                      {/* Floating Label */}
-                      <div className="absolute -right-20 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
-                        <div className="bg-white rounded-lg shadow-lg px-4 py-2 border border-blue-100">
-                          <span className="text-sm font-medium text-gray-700">{mockup.title}</span>
-                          <div className="absolute left-0 top-1/2 transform -translate-x-1 -translate-y-1/2 w-2 h-2 bg-white border-l border-b border-blue-100 rotate-45"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Side Decorations */}
-              <div className="absolute left-10 top-20 w-20 h-20 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-full blur-xl animate-pulse"></div>
-              <div
-                className="absolute right-10 top-40 w-16 h-16 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-xl animate-pulse"
-                style={{ animationDelay: "1s" }}
-              ></div>
-              <div
-                className="absolute left-20 bottom-40 w-24 h-24 bg-gradient-to-br from-yellow-400/20 to-orange-400/20 rounded-full blur-xl animate-pulse"
-                style={{ animationDelay: "2s" }}
-              ></div>
-              <div
-                className="absolute right-16 bottom-20 w-18 h-18 bg-gradient-to-br from-green-400/20 to-emerald-400/20 rounded-full blur-xl animate-pulse"
-                style={{ animationDelay: "3s" }}
-              ></div>
-            </div>
-          </div>
-
-          <div className="grid lg:grid-cols-2 gap-12 items-center mt-20">
-            <div className="order-1 lg:order-2 space-y-6">
-              <h3 className="text-2xl font-bold text-gray-900">Pembelajaran yang Komprehensif</h3>
-              <div className="space-y-4">
-                {[
-                  "Berbagai mata pelajaran dalam satu aplikasi",
-                  "Level kesulitan yang bertahap dan adaptif",
-                  "Quiz interaktif dengan berbagai format soal",
-                  "Sistem reward yang memotivasi belajar",
-                ].map((item, index) => (
-                  <div key={index} className="flex items-center space-x-3">
-                    <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
-                    <span className="text-gray-700">{item}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="order-2 lg:order-1 relative">
-              <div className="grid grid-cols-2 gap-4">
-                <Image
-                  src="/images/phone-home.svg"
-                  alt="Home Screen"
-                  width={200}
-                  height={400}
-                  className="w-full h-auto rounded-xl shadow-lg transform rotate-2"
-                />
-                <Image
-                  src="/images/phone-question.svg"
-                  alt="Quiz Screen"
-                  width={200}
-                  height={400}
-                  className="w-full h-auto rounded-xl shadow-lg transform -rotate-2 mt-8"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      {/* <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8">
-            {[
-              { number: "10,000+", label: "Siswa Aktif", icon: <Users className="w-8 h-8" /> },
-              { number: "50+", label: "Materi Pembelajaran", icon: <BookOpen className="w-8 h-8" /> },
-              { number: "4.9", label: "Rating App Store", icon: <Star className="w-8 h-8" /> },
-              { number: "95%", label: "Tingkat Kepuasan", icon: <Trophy className="w-8 h-8" /> },
-            ].map((stat, index) => (
-              <div key={index} className="text-center space-y-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-2xl flex items-center justify-center text-white mx-auto">
-                  {stat.icon}
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-gray-900">{stat.number}</div>
-                  <div className="text-gray-600">{stat.label}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section> */}
-
-      {/* Download Section */}
-      <section id="download" className="py-20 bg-gradient-to-br from-blue-600 to-cyan-500">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="space-y-8">
-            <div className="space-y-4">
-              <h2 className="text-3xl lg:text-5xl font-bold text-white">Siap Memulai Petualangan Belajar?</h2>
-              <p className="text-xl text-blue-100 max-w-2xl mx-auto">
-                Download Cerdikia sekarang dan bergabunglah dengan ribuan siswa yang sudah merasakan cara belajar yang
-                menyenangkan!
-              </p>
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              {/* <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-6">
-                <Apple className="w-6 h-6 mr-3" />
-                Download for iOS
-              </Button> */}
-              <Button
-              size="lg"
-              className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-6"
-              onClick={() => {
-                const link = process.env.NEXT_PUBLIC_DOWNLOAD_LINK;
-                if (link) {
-                  window.open(link, '_blank'); // Open APK link in new tab
-                } else {
-                  console.error("Download link not found in env");
-                }
-              }}
-            >
-              <Download className="w-6 h-6 mr-3" />
-              Download for Android
-            </Button>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div className="space-y-4">
-              <div className="flex items-start justify-start flex-shrink-0">
-                <button onClick={scrollToTop} className="focus:outline-none flex-shrink-0">
-                  <Image
-                    src="/images/cerdikia-logo.svg"
-                    alt="Cerdikia Logo"
-                    width={140}
-                    height={45}
-                    className="h-20 w-auto cursor-pointer hover:scale-105 transition-transform duration-200"
-                  />
-                </button>
-              </div>
-              <p className="text-gray-400">
-                Aplikasi pembelajaran yang membuat belajar menjadi menyenangkan dan interaktif untuk semua anak.
-              </p>
-            </div>
-
-            <div>
-              <h4 className="font-semibold mb-4">Produk</h4>
-              <div className="space-y-2 text-gray-400">
-                <div>Fitur</div>
-                <div>Harga</div>
-                <div>Download</div>
-                <div>Update</div>
-              </div>
-            </div>
-
-            <div>
-              <h4 className="font-semibold mb-4">Dukungan</h4>
-              <div className="space-y-2 text-gray-400">
-                <div>Help Center</div>
-                <div>Kontak</div>
-                <div>FAQ</div>
-                <div>Komunitas</div>
-              </div>
-            </div>
-
-            <div>
-              <h4 className="font-semibold mb-4">Perusahaan</h4>
-              <div className="space-y-2 text-gray-400">
-                <div>Tentang Kami</div>
-                <div>Blog</div>
-                <div>Karir</div>
-                <div>Privacy Policy</div>
-              </div>
-            </div>
-          </div>
-
-          <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
-            <p>&copy; 2025 Cerdikia. All rights reserved.</p>
-          </div>
-        </div>
+      <footer className="footer section-wrap">
+        <a className="brand footer-brand" href="#top" aria-label="Cerdikia, kembali ke atas"><Image src="/images/cerdikia-logo.svg" alt="Cerdikia" width={138} height={44} /></a>
+        <p>Belajar, bermain, bertumbuh.</p>
+        <nav aria-label="Navigasi footer"><a href="#tentang">Tentang</a><a href="#fitur">Fitur</a><a href="#ranking">Ranking</a><a href="#unduh">Unduh</a></nav>
+        <span className="copyright">© {new Date().getFullYear()} Cerdikia</span>
       </footer>
-    </div>
+    </main>
   )
 }
