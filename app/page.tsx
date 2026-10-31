@@ -4,11 +4,11 @@ import Image from "next/image"
 import { ArrowDown, ArrowRight, BookOpen, Check, Download, Flame, Gamepad2, Trophy, Zap } from "lucide-react"
 
 const tiers = [
-  { name: "Bronze", image: "/images/bronze.svg", note: "Langkah pertama" },
-  { name: "Silver", image: "/images/silver.svg", note: "Terus bertumbuh" },
-  { name: "Gold", image: "/images/gold.svg", note: "Makin bersinar" },
-  { name: "Platinum", image: "/images/platinum.svg", note: "Konsisten berlatih" },
-  { name: "Diamond", image: "/images/diamond.svg", note: "Puncak prestasi" },
+  { name: "Bronze", image: "/images/bronze.svg", xp: "0 XP" },
+  { name: "Silver", image: "/images/silver.svg", xp: "Min. 1.000 XP" },
+  { name: "Gold", image: "/images/gold.svg", xp: "Min. 2.000 XP" },
+  { name: "Platinum", image: "/images/platinum.svg", xp: "Min. 3.000 XP" },
+  { name: "Diamond", image: "/images/diamond.svg", xp: "Min. 5.000 XP" },
 ]
 
 const screens = [
@@ -49,7 +49,7 @@ export default function Home() {
         </div>
         <div className="hero-art" aria-label="Pratinjau aplikasi Cerdikia">
           <div className="art-tag tag-top"><span className="tag-icon"><Zap size={15} fill="currentColor" /></span> Poin XP terkumpul</div>
-          <Image className="overview-image" src="/images/mockup-overview.png" alt="Kolase layar belajar, latihan, misi, dan reward di aplikasi Cerdikia" width={1400} height={800} priority />
+          <Image className="hero-banner" src="/images/cerdikiabanner.png" alt="Banner aplikasi Cerdikia dengan karakter dan tampilan belajar interaktif" width={1400} height={800} priority />
           <div className="art-tag tag-bottom"><span className="tag-icon tag-orange"><Trophy size={15} /></span> Setiap latihan punya arti</div>
         </div>
         <a className="scroll-cue" href="#tentang"><span /> Gulir untuk menjelajah</a>
@@ -92,11 +92,10 @@ export default function Home() {
             <div className="section-marker section-marker-light"><span>03</span><span className="marker-line" /> Tangga pencapaian</div>
             <h2>Setiap usaha<br />punya <span>tingkat baru.</span></h2>
             <p>Terus berlatih dan kumpulkan XP. Perjalananmu akan ditandai dengan tier ranking yang bisa diraih setahap demi setahap.</p>
-            <div className="ranking-proof"><Image src="/images/ranking-frame.svg" alt="Contoh tampilan ranking di aplikasi Cerdikia" width={200} height={400} /><span><strong>Belajar. Dapat XP.</strong><br />Lihat progres naik.</span></div>
           </div>
           <div className="tier-list" aria-label="Urutan tier ranking Cerdikia">
             {tiers.map((tier, index) => <article className="tier-row" key={tier.name}>
-              <span className="tier-order">0{index + 1}</span><Image src={tier.image} alt={`Lencana ${tier.name}`} width={68} height={68} /><span className="tier-name">{tier.name}</span><span className="tier-note">{tier.note}</span><Check className="tier-check" size={16} />
+              <span className="tier-order">0{index + 1}</span><Image src={tier.image} alt={`Lencana ${tier.name}`} width={68} height={68} /><span className="tier-name">{tier.name}</span><span className="tier-note">{tier.xp}</span><Check className="tier-check" size={16} />
             </article>)}
             <p className="tier-footnote">Urutan tier dari awal hingga pencapaian tertinggi.</p>
           </div>
